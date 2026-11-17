@@ -1,0 +1,4 @@
+# What the host needs to build the site (kept small so deploys are fast).
+markdown>=3.6
+pygments>=2.18
+jinja2>=3.1

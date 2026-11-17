@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% from "_macros.html" import tag_list, severity %}
+{% block content %}
+<article class="post">
+  <header class="post-header">
+    <p class="meta">
+      <time datetime="{{ post.date.isoformat() }}">{{ post.date|date }}</time>
+      {% if post.updated %}· updated <time datetime="{{ post.updated.isoformat() }}">{{ post.updated|date }}</time>{% endif %}
+      {% if post.draft %}<span class="sev draft">draft</span>{% endif %}
+    </p>
+    <h1>{{ post.title }}</h1>
+    {% if post.summary %}<p class="lead">{{ post.summary }}</p>{% endif %}
+    {% if post.severity or post.cves or post.disclosure %}
+    <dl class="advisory">
+      {% if post.cves or post.severity %}<div><dt>finding</dt><dd>{{ severity(post) }}</dd></div>{% endif %}
+      {% if post.disclosure %}<div><dt>disclosure</dt><dd>{{ post.disclosure }}</dd></div>{% endif %}
+    </dl>
+    {% endif %}
+    {{ tag_list(post.tags) }}
+  </header>
+
+  {% if post.toc %}
+  <nav class="toc" aria-label="Table of contents">
+    <p class="toc-title">contents</p>
+    <ol>{% for h in post.toc %}<li class="lvl-{{ h.level }}"><a href="#{{ h.id }}">{{ h.name }}</a></li>{% endfor %}</ol>
+  </nav>
+  {% endif %}
+
+  <div class="prose">{{ post.html|safe }}</div>
+
+  <nav class="post-nav" aria-label="More blogs">
+    {% if post.newer %}<a class="newer" href="{{ u('/blogs/' ~ post.newer.slug ~ '/') }}"><span>newer</span>{{ post.newer.title }}</a>{% else %}<span></span>{% endif %}
+    {% if post.older %}<a class="older" href="{{ u('/blogs/' ~ post.older.slug ~ '/') }}"><span>older</span>{{ post.older.title }}</a>{% endif %}
+  </nav>
+</article>
+{% endblock %}

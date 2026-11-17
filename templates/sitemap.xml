@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {% set root = site.url ~ site.base_path %}
+  {% for page in ['/', '/blogs/', '/about/', '/tags/'] %}
+  <url><loc>{{ root }}{{ page }}</loc></url>
+  {% endfor %}
+  {% for p in posts %}
+  <url><loc>{{ root }}/blogs/{{ p.slug }}/</loc><lastmod>{{ (p.updated or p.date).isoformat() }}</lastmod></url>
+  {% endfor %}
+  {% for t in tags %}
+  <url><loc>{{ root }}/tags/{{ t.slug }}/</loc></url>
+  {% endfor %}
+</urlset>

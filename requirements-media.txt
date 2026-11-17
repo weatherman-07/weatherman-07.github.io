@@ -1,0 +1,6 @@
+# For working on the site locally: everything in requirements.txt, plus the tools that turn your
+# images/GIFs/videos in art-src/ into the ASCII backgrounds and the graded background video.
+# Not needed on the host: the generated files are committed.
+-r requirements.txt
+pillow>=10.0
+opencv-python-headless>=4.8

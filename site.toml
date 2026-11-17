@@ -1,0 +1,38 @@
+# Site-wide settings. Edit these first.
+
+title = "Weatherman07"
+name_a = "WEATHER"                          # big block half of the hero name
+name_b = "Man07"                            # grainy brush half of the hero name
+handle = "weatherman07"                     # used in the terminal prompt
+host = "seireitei"                          # the "@host" part of the prompt
+kanji = "天気"                               # ghost kanji behind the hero ("weather")
+tagline = "it rains when i want"
+description = "Weatherman07: security research, reverse engineering and write-ups."   # search/link previews only
+author = "Weatherman07"
+url = "https://weatherman-07.github.io"    # final public URL, no trailing slash
+base_path = ""                              # e.g. "/my-repo" when hosting at user.github.io/my-repo
+
+# Chips under the hero name.
+chips = ["vuln research", "reverse engineering", "exploit dev", "write-ups"]
+
+# Links shown in the footer / about page. Entries with an empty url are hidden.
+# Keep these to handles you're happy to be public; nothing else is collected.
+[[links]]
+label = "GitHub"
+url = ""
+
+[[links]]
+label = "X / Twitter"
+url = ""
+
+[[links]]
+label = "Mastodon"
+url = ""
+
+[[links]]
+label = "Discord"
+url = ""
+
+[[links]]
+label = "PGP key"
+url = ""

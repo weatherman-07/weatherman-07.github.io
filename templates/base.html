@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" data-theme="void">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page_title %}{{ page_title }} · {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ description or site.description }}">
+  <meta name="author" content="{{ site.author }}">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="canonical" href="{{ canonical }}">
+  <meta property="og:site_name" content="{{ site.title }}">
+  <meta property="og:type" content="{{ og_type or 'website' }}">
+  <meta property="og:title" content="{{ page_title or site.title }}">
+  <meta property="og:description" content="{{ description or site.description }}">
+  <meta property="og:url" content="{{ canonical }}">
+  <meta name="twitter:card" content="summary">
+  <script>
+    // Runs before first paint: decide whether to play the intro card (home, once per session).
+    (function () {
+      var r = document.documentElement, seen = false;
+      try { seen = sessionStorage.getItem("intro") === "1"; } catch (e) { seen = true; }
+      var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if ("{{ section }}" === "home" && !seen && !calm) r.classList.add("intro-on");
+    })();
+  </script>
+  <link rel="stylesheet" href="{{ u('/assets/pygments.css') }}">
+  <link rel="stylesheet" href="{{ u('/assets/style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0a0a'/%3E%3Cpath d='M5 26C7 12 17 5 28 6 19 9 11 15 5 26Z' fill='%23ffd60a'/%3E%3C/svg%3E">
+</head>
+<body class="sec-{{ section }}" data-base="{{ site.base_path }}">
+  {# Grain / rough-edge filter used by .grain (hero name, headings, intro card). #}
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="warp"/>
+      <feDisplacementMap in="SourceGraphic" in2="warp" scale="5" result="rough"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="9" result="grit"/>
+      <feColorMatrix in="grit" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  7 0 0 0 -2.15" result="holes"/>
+      <feComposite in="rough" in2="holes" operator="in"/>
+    </filter>
+  </svg>
+  {# No animated background on blog posts (no_bg): nothing competes with the writing, and nothing is downloaded. #}
+  {% if not no_bg %}
+    {% if site.has_bg_video %}
+    <video id="bg-video" class="bg-video" muted loop playsinline preload="none" poster="{{ u('/assets/video/bg.jpg') }}" aria-hidden="true" tabindex="-1">
+      <source src="{{ u('/assets/video/bg.mp4') }}" type="video/mp4">
+    </video>
+    {% else %}
+    <canvas id="ascii-bg" aria-hidden="true"></canvas>
+    {% endif %}
+  {% endif %}
+  <div class="film" aria-hidden="true"></div>
+
+  {% if section == 'home' %}
+  <div id="intro" aria-hidden="true"><div class="strip grain">{{ site.title|upper }}</div></div>
+  {% endif %}
+
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap topbar">
+      <a class="prompt" href="{{ u('/') }}" aria-label="Home">
+        <em>{{ site.handle }}</em>@{{ site.host }}:~/{{ section if section not in ('404', 'tags') else 'lost' if section == '404' else 'tags' }} $<span class="cur" aria-hidden="true"></span>
+      </a>
+      <nav aria-label="Main">
+        <a href="{{ u('/') }}" {% if section == 'home' %}aria-current="page"{% endif %}>~/home</a>
+        <a href="{{ u('/blogs/') }}" {% if section in ('blogs', 'tags') %}aria-current="page"{% endif %}>~/blogs</a>
+        <a href="{{ u('/about/') }}" {% if section == 'about' %}aria-current="page"{% endif %}>~/about</a>      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+
+  {# No line, no copyright. The footer only appears if you add social links in site.toml. #}
+  {% if site.links %}
+  <footer class="site-footer">
+    <div class="wrap footer-links">
+      {% for l in site.links %}<a href="{{ l.url }}" rel="me noopener">{{ l.label }}</a>{% endfor %}
+    </div>
+  </footer>
+  {% endif %}
+  <script src="{{ u('/assets/site.js') }}" defer></script>
+</body>
+</html>

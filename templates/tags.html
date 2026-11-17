@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="page-title grain">Tags</h1>
+{% if tags %}
+<ul class="tag-cloud">
+  {% for t in tags %}<li><a href="{{ u('/tags/' ~ t.slug ~ '/') }}">#{{ t.name }} <span>{{ t.posts|length }}</span></a></li>{% endfor %}
+</ul>
+{% else %}
+<p class="muted">No tags yet.</p>
+{% endif %}
+{% endblock %}

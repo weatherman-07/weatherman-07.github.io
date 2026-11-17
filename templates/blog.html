@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "_macros.html" import post_row %}
+{% block content %}
+<h1 class="page-title grain">Blogs</h1>
+<p class="muted">Search the full text, or narrow by tag.</p>
+
+<div class="finder" id="search">
+  <label class="search">
+    <span class="sr-only">Search blogs</span>
+    <input id="post-filter" type="search" placeholder="/ search titles, tags, CVEs and full text…" autocomplete="off">
+  </label>
+  {% if all_tags %}
+  <div class="tagbar" role="group" aria-label="Filter by tag">
+    {% for t in all_tags %}<button type="button" class="chip" data-tag="{{ t.slug }}" aria-pressed="false">#{{ t.name }} <span>{{ t.posts|length }}</span></button>{% endfor %}
+    <button type="button" class="chip clear" id="clear-filters" hidden>clear ✕</button>
+  </div>
+  {% endif %}
+  <p class="count" id="result-count" aria-live="polite"></p>
+</div>
+
+{% if posts %}
+<ul class="rows" id="post-list">{% for p in posts %}{{ post_row(p) }}{% endfor %}</ul>
+<p id="no-results" class="muted" hidden>Nothing matches that. Try fewer words or clear the tags.</p>
+{% else %}
+<p class="muted">No blogs yet.</p>
+{% endif %}
+{% endblock %}

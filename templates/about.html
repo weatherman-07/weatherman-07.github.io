@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero about">
+  <div class="halftone" aria-hidden="true"></div>
+  <div class="kanji grain" aria-hidden="true">我</div>
+  <svg class="slash" viewBox="0 0 300 300" aria-hidden="true"><path d="M20 250 C 40 110, 160 20, 285 30 C 175 60, 90 140, 20 250 Z"/></svg>
+
+  <h1 class="sr-only">About</h1>
+  <p class="eyebrow" aria-hidden="true">&gt;&gt;&gt; about</p>
+  <div class="statement">{{ content|safe }}</div>
+</section>
+
+{% if site.links %}
+<h2 class="elsewhere">Elsewhere</h2>
+<ul class="link-list">
+  {% for l in site.links %}<li><a href="{{ l.url }}" rel="me noopener">{{ l.label }}</a></li>{% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

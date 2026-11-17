@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_macros.html" import post_row %}
+{% block content %}
+<section class="hero">
+  <div class="halftone" aria-hidden="true"></div>
+  <div class="kanji grain" aria-hidden="true">{{ site.kanji }}</div>
+  <svg class="slash" viewBox="0 0 300 300" aria-hidden="true"><path d="M20 250 C 40 110, 160 20, 285 30 C 175 60, 90 140, 20 250 Z"/></svg>
+
+  <h1 class="name" aria-label="{{ site.title }}"><span class="a grain" aria-hidden="true">{{ site.name_a }}</span><span class="b grain" aria-hidden="true">{{ site.name_b }}</span></h1>
+  <p class="tagline">&gt;&gt;&gt; {{ site.tagline }}</p>
+  {% if site.chips %}<ul class="chips">{% for c in site.chips %}<li>{{ c }}</li>{% endfor %}</ul>{% endif %}
+  <p class="scroll">↓ scroll, or press j</p>
+</section>
+
+<section aria-labelledby="latest">
+  <div class="sect-head">
+    <h2 id="latest"><em>01</em>Latest blogs</h2>
+    <a href="{{ u('/blogs/') }}">search all {{ total_posts }} →</a>
+  </div>
+  {% if posts %}
+  <ul class="rows">{% for p in posts %}{{ post_row(p) }}{% endfor %}</ul>
+  {% else %}
+  <p class="muted">No blogs yet. Add a Markdown file to <code>content/posts/</code>.</p>
+  {% endif %}
+</section>
+{% endblock %}

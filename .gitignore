@@ -1,0 +1,7 @@
+dist/
+art-src/
+design/
+.venv/
+.venv-wsl/
+__pycache__/
+*.pyc

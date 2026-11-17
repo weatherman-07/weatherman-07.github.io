@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero short">
+  <p class="tagline">$ cat /missing/page</p>
+  <h1 class="name"><span class="a grain">404</span></h1>
+  <p class="lead">No such file or directory. The page moved, or the storm took it.</p>
+  <p class="cta"><a class="btn primary" href="{{ u('/') }}">back home</a> <a class="btn" href="{{ u('/blogs/') }}">search blogs</a></p>
+</section>
+{% endblock %}

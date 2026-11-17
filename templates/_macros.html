@@ -1,0 +1,29 @@
+{% macro tag_list(tags) %}
+  {% if tags %}
+  <ul class="tags">
+    {% for t in tags %}<li><a href="{{ u('/blogs/?tag=' ~ t.slug) }}">#{{ t.name }}</a></li>{% endfor %}
+  </ul>
+  {% endif %}
+{% endmacro %}
+
+{% macro severity(p) %}
+  {% if p.severity %}<span class="sev sev-{{ p.severity }}">{{ p.severity }}</span>{% endif %}
+  {% for c in p.cves %}<span class="sev cve">{{ c }}</span>{% endfor %}
+{% endmacro %}
+
+{% macro post_row(p) %}
+  <li class="row" data-slug="{{ p.slug }}" data-tags="{{ p.tags|map(attribute='slug')|join(' ') }}" data-search="{{ (p.title ~ ' ' ~ p.summary ~ ' ' ~ p.tags|map(attribute='name')|join(' ') ~ ' ' ~ p.cves|join(' '))|lower }}">
+    <span class="n" aria-hidden="true">{{ p.no }}</span>
+    <div class="body">
+      <a class="t" href="{{ u('/blogs/' ~ p.slug ~ '/') }}">{{ p.title }}</a>
+      {% if p.draft %}<span class="sev draft">draft</span>{% endif %}
+      {% if p.summary %}<p class="summary">{{ p.summary }}</p>{% endif %}
+      <p class="m">
+        <time datetime="{{ p.date.isoformat() }}">{{ p.date|date }}</time>
+        {% for t in p.tags %}<a href="{{ u('/blogs/?tag=' ~ t.slug) }}">#{{ t.name }}</a> {% endfor %}
+      </p>
+    </div>
+    <div class="flags">{{ severity(p) }}</div>
+  </li>
+{% endmacro %}
+

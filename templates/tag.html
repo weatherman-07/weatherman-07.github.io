@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% from "_macros.html" import post_row %}
+{% block content %}
+<h1 class="page-title grain">#{{ tag.name }}</h1>
+<p class="muted">{{ tag.posts|length }} blog{{ '' if tag.posts|length == 1 else 's' }} · <a href="{{ u('/tags/') }}">all tags</a></p>
+<ul class="rows">{% for p in tag.posts %}{{ post_row(p) }}{% endfor %}</ul>
+{% endblock %}
