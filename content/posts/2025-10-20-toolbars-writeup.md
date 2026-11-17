@@ -265,9 +265,9 @@ We're stuck inside.
 
 Fetching the raw SSR HTML confirms the escape happened at the server level: the injected content appears at header level in the page source, not inside the div. The browser's document parser placed it correctly.
 
-<img src="/assets/media/toolbars/08-console-trap.jpg" alt="Console showing error #418 and markerParentTag: 'DIV' -- the marker element trapped inside the div after hydration" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
+<img src="/assets/media/toolbars/08-console-trap.jpg" alt="Console showing error #418 and markerParentTag: 'DIV', the marker element trapped inside the div after hydration" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
 
-After React runs, `markerParentTag: 'DIV'` -- the marker ended up inside the div. React threw error #418 because the MarkdownBar subtree no longer matches the RSC payload after the innerHTML reassignment. The SSR HTML had the escape; the post-hydration DOM doesn't.
+After React runs, `markerParentTag: 'DIV'`, the marker ended up inside the div. React threw error #418 because the MarkdownBar subtree no longer matches the RSC payload after the innerHTML reassignment. The SSR HTML had the escape; the post-hydration DOM doesn't.
 
 <img src="/assets/media/toolbars/diag-01-parser-asymmetry.png" alt="Diagram showing the same injection string behaving differently in full-page HTML parse versus innerHTML fragment parse" style="max-width:100%;height:auto;display:block;margin:1.5em 0">
 
@@ -391,11 +391,11 @@ The real CalcBar section from the SSR stream ends up after `</main>` at body lev
 
 `eval("document.title='PWNED'")` returns `"PWNED"` (the value of the assignment), which renders in `<code>`. `useEffect` fired, eval ran.
 
-<img src="/assets/media/toolbars/10-console-working.jpg" alt="Console showing calcInput: '1+1', codeResult: '2', headerChildCount: 4 -- exploit confirmed with no hydration errors" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
+<img src="/assets/media/toolbars/10-console-working.jpg" alt="Console showing calcInput: '1+1', codeResult: '2', headerChildCount: 4, exploit confirmed with no hydration errors" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
 
 Verifying with a simpler payload: `headerChildCount: 4`, `calcInput: '1+1'`, `codeResult: '2'`. No hydration errors. The fake section was adopted at header[3], `useEffect` read the value, eval ran. The page fix (`</header><main>...</main>`) gave React a structurally correct DOM so no re-render was triggered.
 
-One visible side-effect: the injected `<section class="toolbar">` exists in the DOM as a real element, so the browser renders it as an actual toolbar on the page. React never touches it after hydration, so it stays there -- a ghost toolbar with the input pre-filled to `1+1`.
+One visible side-effect: the injected `<section class="toolbar">` exists in the DOM as a real element, so the browser renders it as an actual toolbar on the page. React never touches it after hydration, so it stays there as a ghost toolbar with the input pre-filled to `1+1`.
 
 <img src="/assets/media/toolbars/11-secondary-bar.jpg" alt="The injected fake CalcBar section rendered as a visible toolbar on the page, showing the pre-filled input" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
 
