@@ -2,7 +2,7 @@
 title = "TOOLBARS: React hydration as an exploit primitive (Hack.lu CTF 2025)"
 date = 2025-10-20
 summary = "dangerouslySetInnerHTML gives you raw HTML injection in a Next.js page. The CSP blocks every script execution path. The only eval() on the page reads from a React ref during hydration. Getting the payload there requires pre-corrupting the DOM tree before React walks it."
-tags = ["web", "xss", "react", "nextjs", "ctf", "hydration", "csp"]
+tags = ["web", "xss", "ctf"]
 +++
 
 This was an eye opener challenge for me. I used to think XS-Leaks is peak (it still is) but I've never come across or attempted such a complex challenge before. I couldn't solve it while the CTF was going on, but looking at the post-CTF discussion I knew I had to upsolve it, and that was mentally straining honestly. I had to take a few walk sessions trying to understand "how... why does this work." Anyways, the challenge only had 10 solves. The CTF platform was IKEA-themed (very fitting for a toolbar challenge):
