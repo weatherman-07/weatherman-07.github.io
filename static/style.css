@@ -121,7 +121,7 @@ body:not(.sec-home) .film { opacity: calc(var(--film) * .5); }
 .row .n { font: 400 1.7rem/1.1 var(--display); color: var(--accent); }
 .row .t { font-weight: 700; font-size: 1rem; color: var(--fg); text-decoration: none; }
 .row .t:hover { color: var(--accent); text-decoration: underline; text-decoration-thickness: 3px; }
-.row .summary { color: var(--ash); font-size: .85rem; margin: .2rem 0 .1rem; line-height: 1.55; }
+.row .summary { color: #b8b09a; font-size: .85rem; margin: .2rem 0 .1rem; line-height: 1.55; }
 .row .m { color: var(--ash); font-size: .76rem; margin: .2rem 0 0; }
 .row .m a { color: var(--ash); text-decoration: none; margin-left: .4rem; }
 .row .m a:hover { color: var(--accent); }
