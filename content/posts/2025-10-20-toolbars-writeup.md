@@ -269,7 +269,7 @@ Fetching the raw SSR HTML confirms the escape happened at the server level: the 
 
 After React runs, `markerParentTag: 'DIV'` -- the marker ended up inside the div. React threw error #418 because the MarkdownBar subtree no longer matches the RSC payload after the innerHTML reassignment. The SSR HTML had the escape; the post-hydration DOM doesn't.
 
-<img src="/assets/media/toolbars/diag-01-parser-asymmetry.svg" alt="Diagram showing the same injection string behaving differently in full-page HTML parse versus innerHTML fragment parse" style="max-width:100%;height:auto;display:block;margin:1.5em 0">
+<img src="/assets/media/toolbars/diag-01-parser-asymmetry.png" alt="Diagram showing the same injection string behaving differently in full-page HTML parse versus innerHTML fragment parse" style="max-width:100%;height:auto;display:block;margin:1.5em 0">
 
 The asymmetry is a property of the two parsing modes, not of React specifically. The full-page HTML parser tracks a stack of open elements and interprets closing tags against that stack. The fragment parser used by `innerHTML` starts with an empty stack and cannot close its own context element from the inside. Same bytes, different context, different trees.
 
@@ -310,7 +310,7 @@ header                    header
   section[3] ← CalcBar     ←→  section.toolbar  ← key
 ```
 
-<img src="/assets/media/toolbars/diag-02-hydration-walk.svg" alt="Diagram showing React walking RSC payload tree and DOM childNodes in parallel, with CalcBar at header[3] being hydrated onto our injected fake section" style="max-width:100%;height:auto;display:block;margin:1.5em 0">
+<img src="/assets/media/toolbars/diag-02-hydration-walk.png" alt="Diagram showing React walking RSC payload tree and DOM childNodes in parallel, with CalcBar at header[3] being hydrated onto our injected fake section" style="max-width:100%;height:auto;display:block;margin:1.5em 0">
 
 React walks to `header.childNodes[3]` and hydrates CalcBar onto whatever it finds there. During that walk, when it reaches the `<input ref={input}>` JSX node, it sets `input.current` to the DOM `<input>` at that position in the existing DOM tree. No re-creation happens; the DOM node is adopted in place.
 
