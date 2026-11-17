@@ -80,7 +80,7 @@ function renderMarkdown(md) {
 
 `renderMarkdown` does no sanitisation. Any HTML you put in `?md=` ends up in `dangerouslySetInnerHTML.__html` verbatim.
 
-Two React props on that div. During hydration, React walks each DOM node and applies props from the RSC payload. For most nodes it just checks for mismatches. For a `dangerouslySetInnerHTML` node, React always calls `element.innerHTML = html`. This is in `updateDOMProperties` in the reconciler, the same path that runs during a normal re-render, not special hydration-only code. `suppressHydrationWarning` suppresses the console warning React would otherwise emit about the mismatch between the document-parsed DOM and the fragment-parsed result. The innerHTML assignment happens either way. This distinction matters: the attack relies on `innerHTML` running unconditionally, not being skipped when the content happens to match.
+Two React props on that div. During hydration, React walks each DOM node and applies the component's props to it. For most nodes it just checks for mismatches. For a `dangerouslySetInnerHTML` node, React always calls `element.innerHTML = html`. This is in `updateDOMProperties` in the reconciler, the same path that runs during a normal re-render, not special hydration-only code. `suppressHydrationWarning` suppresses the console warning React would otherwise emit about the mismatch between the document-parsed DOM and the fragment-parsed result. The innerHTML assignment happens either way. The attack relies on `innerHTML` running unconditionally, not being skipped when the content happens to match.
 
 <img src="/assets/media/toolbars/02-markdown-rendered.jpg" alt="MarkdownBar showing rendered markdown: italic, bold, and code" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
 
@@ -271,25 +271,17 @@ After React runs, `markerParentTag: 'DIV'`, the marker ended up inside the div. 
 
 <img src="/assets/media/toolbars/diag-01-parser-asymmetry.png" alt="Diagram showing the same injection string behaving differently in full-page HTML parse versus innerHTML fragment parse" style="max-width:100%;height:auto;display:block;margin:1.5em 0">
 
-The asymmetry is a property of the two parsing modes, not of React specifically. The full-page HTML parser tracks a stack of open elements and interprets closing tags against that stack. The fragment parser used by `innerHTML` starts with an empty stack and cannot close its own context element from the inside. Same bytes, different context, different trees.
+The asymmetry is a property of the two parsing modes, not of React specifically. The full-page HTML parser tracks a stack of open elements and interprets closing tags against that stack. The fragment parser used by `innerHTML` starts with an empty stack and cannot close its own context element from the inside.
 
 ---
 
 ## How SSR and hydration work in Next.js
 
-Visiting a Next.js App Router page triggers two things on the server in parallel:
+When you visit a Next.js App Router page, two things happen on the server simultaneously. React Server Components run and produce raw HTML (`page.js`, `Toolbar.js`, `MarkdownBar.js` are all server-side), and that HTML goes to the browser immediately before any JavaScript loads. At the same time, the same component tree gets serialised as a structured description of which client components exist, what props they got, and how the tree nests. This is the RSC payload. It gets embedded as `<script>self.__next_f.push([...])</script>` tags in the same HTTP response.
 
-**1. HTML stream.** React Server Components (`page.js`, `Toolbar.js`, `MarkdownBar.js`) run server-side and produce raw HTML. This gets sent to the browser immediately, before any JavaScript loads, so the page appears rendered on first paint.
+On the client, the browser builds the DOM from that HTML before any JS runs. Then the React bundle loads, reads the RSC payload, and walks it against the existing DOM simultaneously, matching nodes by `childNodes` position. React attaches event listeners, resolves refs, starts client component state. It doesn't recreate DOM nodes; it adopts the existing ones.
 
-**2. RSC payload.** The same component tree is also serialised as a structured component description: which client components exist, what props they received, how the tree nests. This gets embedded as `<script>self.__next_f.push([...])</script>` tags in the same HTTP response.
-
-Then on the client:
-
-**3. Browser builds the DOM** from the HTML stream. The full document parser runs to completion and produces the DOM tree. No JavaScript has run yet.
-
-**4. React hydrates.** The JS bundle loads, reads the RSC payload, and walks it against the existing DOM simultaneously, matching by `childNodes` position in document order. React attaches event listeners, resolves refs, and starts client component state. It does **not** recreate DOM nodes. It adopts the existing ones.
-
-The RSC payload encodes positions: "CalcBar is the fourth child of `<header>`." React doesn't search for CalcBar by component type; it walks to position [3] and uses whatever DOM element is there. This positional walk is the primitive the exploit is built on.
+The RSC payload encodes positions: "CalcBar is the fourth child of `<header>`." React walks to position [3] and uses whatever DOM element is there. That positional walk is what the exploit is built on.
 
 ---
 
@@ -316,7 +308,7 @@ React walks to `header.childNodes[3]` and hydrates CalcBar onto whatever it find
 
 If the structure at `childNodes[3]` matches CalcBar's render (same tag, same tree shape), React adopts it and moves on. If there's a structural mismatch severe enough, React falls back to a full client re-render of that component, which replaces our injected DOM with a freshly created version. We want adoption, not re-render.
 
-React matches by tag name. If the tag name at a given DOM position doesn't match what the RSC payload expects, React throws a hydration error. For client components, React wraps the entire component's hydration in an error boundary; if any hydration error is thrown during the walk, the whole component is discarded and re-rendered from scratch on the client. Tag name mismatches are fatal. Missing text nodes and extra attributes emit warnings but don't trigger a re-render by themselves. For uncontrolled inputs, React explicitly avoids overwriting `element.value` during hydration, by deliberate design to preserve pre-filled form state.
+React matches by tag name. A tag name mismatch throws a hydration error and the whole client component gets discarded and re-rendered from scratch, so our injected DOM gets replaced with a fresh empty input. Minor things like extra attributes or missing text nodes just emit warnings without triggering a re-render, which is fine for us. And for uncontrolled inputs specifically, React deliberately skips writing `element.value` during hydration to preserve any value the user typed before JS loaded.
 
 ---
 
@@ -324,7 +316,7 @@ React matches by tag name. If the tag name at a given DOM position doesn't match
 
 The idea: put a structurally-identical fake CalcBar section at `header.childNodes[3]` before React walks the DOM. With a `value="PAYLOAD"` on the fake input, React adopts the section, attaches `input.current` to our input, `useEffect` reads `input.current.value = "PAYLOAD"`, and `eval("PAYLOAD")` runs.
 
-Three sub-problems to solve.
+It breaks down into three sub-problems.
 
 ### Placing content at header level
 
@@ -415,7 +407,7 @@ The whole value passed to `?md=` needs to be percent-encoded in the URL. That's 
 
 <img src="/assets/media/toolbars/13-jorian-discord.png" alt="Jorian's Discord message describing his approach: editing the response HTML of the input to a value with alert, then building the payload with a dangling open comment, ending with RSC boundary markers" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
 
-Same core technique, different ending. Instead of reconstructing the page with `</header><main>...</main>`, Jorian ended the payload with `<!--$--><!--`:
+Jorian used the same escape and the same fake section, but instead of reconstructing the page structure manually, he ended the payload with `<!--$--><!--`:
 
 ```
 ?md=</div></section><section draggable="true" class="toolbar"><div>...</div><div>x</div><div><img src="/calc.png" alt="Logo"></div><div><input placeholder="2+2" value="alert(1)">&nbsp;=&nbsp;<code></code></div></section><!--$--><!--
@@ -464,12 +456,12 @@ flag{hydration_is_important}
 
 ## Takeaways
 
-**`dangerouslySetInnerHTML` = unconditional innerHTML during hydration.** This is in React's reconciler (`updateDOMProperties`), not hydration-specific code. `suppressHydrationWarning` only kills the console warning about the resulting mismatch. The innerHTML call runs either way. If I'd assumed `suppressHydrationWarning` skipped the reassignment entirely, the attack model breaks and I'd have been chasing something that couldn't work.
+`dangerouslySetInnerHTML` calls `element.innerHTML` unconditionally during hydration. It's in React's reconciler (`updateDOMProperties`), not hydration-specific code. `suppressHydrationWarning` only kills the console warning about the resulting mismatch. If I'd assumed it skipped the reassignment entirely, the attack model breaks and I'd have been chasing something that couldn't work.
 
-**Document parser vs fragment parser asymmetry.** `</section>` in a full page parse walks up the open elements stack and implicitly closes ancestors. The same `</section>` via `element.innerHTML = ...` is silently dropped. The fragment algorithm can't close its own context element. This asymmetry is what lets the SSR phase place content at header level while hydration's innerHTML call puts it back inside the div.
+The full-page and fragment parsers treat closing tags differently. `</section>` in a full page parse walks up the open elements stack and implicitly closes ancestors. The same `</section>` via `element.innerHTML = ...` is silently dropped - the fragment algorithm can't close its own context element. This is what lets the SSR phase place content at header level while hydration's innerHTML call puts it back inside the div.
 
-**React's hydration walk is positional.** It matches DOM nodes against the RSC payload tree by position in `childNodes`, not by searching for a matching component. Put the right structure at the right position before React walks the DOM and it adopts your elements in-place, refs included.
+React matches DOM nodes during hydration by position in `childNodes`, not by searching for a matching component. Get the right structure at the right position before React walks, and it adopts those elements in-place, refs and all.
 
-**`value={undefined}` = uncontrolled.** React skips writing to `element.value` during hydration for uncontrolled inputs. This is a deliberate feature: it preserves pre-filled form data. Here it's the gap that lets the injected `value="PAYLOAD"` attribute survive untouched from document parse through to `useEffect`.
+React skips writing to `element.value` during hydration for uncontrolled inputs (`value={undefined}`). It's a deliberate feature to preserve pre-filled form data. Here it's the gap that lets the injected `value="PAYLOAD"` attribute survive untouched from document parse through to `useEffect`.
 
-**CSP with `'unsafe-eval'` and no inline execution is only as safe as "nothing can reach eval".** This challenge has an eval sink and a CSP that blocks every obvious path to it. The path exists, but it requires knowing a React reconciler detail most people haven't thought about as an attack surface.
+A CSP with `'unsafe-eval'` and no inline execution is only as safe as "nothing can reach eval". This challenge has an eval sink with every obvious path blocked. The path there exists, but it requires knowing a React reconciler detail I definitely hadn't thought about as an attack surface before this.
