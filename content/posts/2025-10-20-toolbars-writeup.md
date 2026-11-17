@@ -5,15 +5,15 @@ summary = "dangerouslySetInnerHTML gives you raw HTML injection in a Next.js pag
 tags = ["web", "xss", "react", "nextjs", "ctf", "hydration", "csp"]
 +++
 
-TOOLBARS is a Next.js 15 web challenge from Hack.lu CTF 2025. Source is provided. There's raw HTML injection through `dangerouslySetInnerHTML` and there's a live `eval()` three components away. Getting from one to the other is the whole challenge. The CSP blocks every obvious bridge.
+This was an eye opener challenge for me. I used to think XS-Leaks is peak (it still is) but I've never come across or attempted such a complex challenge before. I couldn't solve it while the CTF was going on, but looking at the post-CTF discussion I knew I had to upsolve it, and that was mentally straining honestly. I had to take a few walk sessions trying to understand "how... why does this work." Anyways, the challenge only had 10 solves. The CTF platform was IKEA-themed (very fitting for a toolbar challenge):
+
+<img src="/assets/media/toolbars/00-challenge-page.jpg" alt="Hack.lu CTF 2025 archive page for TOOLBARS showing Sold: 10, Price: $313, Designer: pspaul" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
+
+The setup: a Next.js 15 app with raw HTML injection through `dangerouslySetInnerHTML` and a live `eval()` three components away. Getting from one to the other is the whole challenge. The CSP blocks every obvious bridge.
 
 **Downloads:** [challenge-src.zip](/assets/downloads/toolbars/challenge-src.zip)
 
 <img src="/assets/media/toolbars/01-challenge-overview.jpg" alt="The TOOLBARS challenge page, four draggable toolbar widgets on a Windows XP-style background" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
-
-The challenge archive page (the CTF site was IKEA-themed -- very fitting for a toolbar challenge) shows 10 solves and a price tag of $313:
-
-<img src="/assets/media/toolbars/00-challenge-page.jpg" alt="Hack.lu CTF 2025 archive page for TOOLBARS showing Sold: 10, Price: $313, Designer: pspaul" style="border:1px solid #ccc;max-width:100%;height:auto;display:block;margin:1.5em 0">
 
 ---
 
