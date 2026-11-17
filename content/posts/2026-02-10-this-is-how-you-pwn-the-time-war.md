@@ -192,7 +192,7 @@ That lands us at `binary+0x1210`. The rand loop (which runs from `0x11c3` throug
 
 We write `0x2210 = 8720` to `code[10]`. This succeeds with probability 1/16 (when the ASLR nibble is `0x1`). We just retry until we get it.
 
-What about `code[54] = 20736 = 0x5100`? Index 54 targets `rbp + 0x60`, which holds a pointer into the binary's `.data` section (`0x...7dd0`). Writing `0x5100` changes its low 16 bits to `0x5100`, making it point into `.text`. This patches a pointer the binary holds about itself; we'll come back to why.
+What about `code[54] = 20736 = 0x5100`? Index 54 targets `rbp + 0x60`, a slot in `__libc_start_call_main`'s stack frame that holds a pointer into the binary's `.data` section. During the re-entry loop, execution winds back through that frame and the slot gets accessed. The original `.data` value crashes. Writing `0x5100` redirects the low 16 bits into `.text` instead, which is readable, so the re-entry survives.
 
 **Round 1 inputs:**
 ```
@@ -313,7 +313,7 @@ constraints:
   rbx == NULL || (u16)[rbx] == NULL
 ```
 
-This is our shell gadget. `rbx == NULL || (u16)[rbx] == NULL` is the key constraint: we need either `rbx = 0` or the memory at `rbx` to be zeroed. This is why the exploit can fail on some runs: the constraint depends on runtime register state. On remote, it's satisfied enough of the time.
+This is our shell gadget. The key constraint is `rbx == NULL || (u16)[rbx] == NULL`. We handle this in Round 3.5.
 
 ### `write2 = leak - 0xd0c59 = libc_base + 0x276e7`
 
@@ -380,7 +380,7 @@ io.sendlineafter(b'Second dial to turn? ', b'74')
 io.sendlineafter(b'What do you want to set it to? ', b'0')
 ```
 
-This makes the rbx constraint deterministic. No luck required.
+This takes care of rbx. On the local setup it fires clean every time.
 
 **Round 4: write low 16 bits of one_gadget:**
 ```python
