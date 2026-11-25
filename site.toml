@@ -13,7 +13,7 @@ url = "https://weatherman-07.github.io"    # final public URL, no trailing slash
 base_path = ""                              # e.g. "/my-repo" when hosting at user.github.io/my-repo
 
 # Chips under the hero name.
-chips = ["vuln research", "reverse engineering", "exploit dev", "write-ups"]
+chips = ["pentest", "rev eng", "web exploitation", "pwn", "android"]
 
 # Links shown in the footer / about page. Entries with an empty url are hidden.
 # Keep these to handles you're happy to be public; nothing else is collected.
