@@ -157,7 +157,7 @@ body:not(.sec-home) .film { opacity: calc(var(--film) * .5); }
 .elsewhere { font-size: 1.3rem; margin-top: 3rem; }
 
 /* ---------- post ---------- */
-.post { max-width: var(--measure); margin-inline: auto; padding-top: 1.5rem; }
+.post { margin-inline: auto; padding-top: 1.5rem; }
 /* Post header: borrow the about-page's display-type grain + halftone */
 .post-header { position: relative; isolation: isolate; padding-bottom: .5rem; }
 .post-header::after {
