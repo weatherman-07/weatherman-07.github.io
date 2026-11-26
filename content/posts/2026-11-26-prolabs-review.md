@@ -5,7 +5,31 @@ summary = ""
 tags = ["pentest"]
 +++
 
-I've completed all 11 HTB Pro Labs. This is a review of each one, what it's actually like, what you'll learn, and what I'd tell someone before they start. Difficulty order I'd rank them: Dante, Alchemy, Zephyr, RastaLabs, Offshore, Wutai, Ifrit, Wanderer, Shinra, Cybernetics, APTLabs.
+<img src="/assets/media/prolabs-review/boink.gif" alt="" style="max-width:100%;margin:1.5em 0;display:block">
+
+My Cybersecurity journey started with me joining a college CTF team called [Cryptonite](https://ctftime.org/team/62713). I started off a rev and crypto guy in my first year, I stuck to rev for long but gave up midway on crypto when the real math started coming in. It was just a decision to choose between rev or crypto and I went with rev. But along with this I've also been trying out other domains so I was developing surface level knowledge on webex as well.
+
+Then comes 2025.
+
+My senior, the Attack Defence Head of the team decides to groom me for a OT/ICS based national pentesting competition. I won't go into how the competition went but ig long story short we finished 1st in it. Pre-comp I was training intensely, I went into Go and Rust rev, was revising my Windows fundamentals and went into more of android. Parallelly I had to take webex seriously now and since it was a pentesting competition, I had to pick that up too.
+
+So I started off with doing some easy-medium HTB machines and got the gist of what this whole scene might be about, but then the competition wasn't going to be a single machine judging by it's previous edition. My team had to train on networked labs and pivoting. Here comes HTB Pro Labs.
+
+You can look up what they are. We started off with P.O.O., Dante and then Alchemy. Sweet treat it was ngl. But I didn't absorb everything very well, not to the best of my expectations. Though my workflows and methodologies devised were perfect for what I was in my opinion, coz for when the pentesting competition started, one of my ideas just rooted the hosting within 10 mins. Yeah that was funny.
+
+So post competition I started doing webex seriously, rev and other domains that I tried didn't give the thrill of "exploiting" anything. Seeking that thrill I got a VIP sub and started doing machines again, and I was on a roll. Post that I took a break and just focused on webex and teaching my juniors stuff.
+
+Then comes 2026.
+
+I was expecting the same competition that I prepped so hard for would come back again and I wanted my juniors to participate as well. It didn't happen eventually but in hopes of "it might happen" I had to improve myself in the first place to teach anyone. That was the initial intention, but that eventually changed drastically.
+
+I started with Dante and Alchemy, and doing it alone gave a real thrill and feel-good moments. I was feeling ecstatic whenever my gut feeling on what the exploit might be went right. Maybe I'll make a blog about it sometime on my mindset when I do pentest if it helps anyone. So naturally, I was getting the better of myself and I swayed away from the intention to learn and teach to just learn. For 3 months I was glued to my chair day and nite to exploit it all. I had to learn binex for some stuff but my fundamentals were pretty strong for it by end of 2025 so that helped a lot.
+
+The whole idea of exploiting things motivated me to further do work on binex which my knowledge progress might be indicated from my writeups for LACTF.
+
+I'm sorry if I did a bad job explaining how I got into it, I'll prolly improve this blog once I collect all my thoughts together.
+
+I've dropped my reviews on all the Pro Labs below so that you get an idea which lab offers what and which one might be your calling. Difficulty order I'd rank them: Dante, Alchemy, Zephyr, RastaLabs, Offshore, Wutai, Ifrit, Wanderer, Shinra, Cybernetics, APTLabs.
 
 ---
 
