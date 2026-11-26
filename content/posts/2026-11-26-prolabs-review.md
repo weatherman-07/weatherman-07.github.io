@@ -1,13 +1,13 @@
 +++
-title = "what got me into pentesting"
+title = "what got me into pentesting and how htb pro labs helped"
 date = 2026-11-26
-summary = ""
+summary = "a short short blog on how I got into pentesting and a review of all htb pro labs"
 tags = ["pentest"]
 +++
 
-<img src="/assets/media/prolabs-review/boink.gif" alt="" style="max-width:100%;margin:1.5em 0;display:block">
+<img src="/assets/media/prolabs-review/boink.gif" alt="" style="max-width:100%;margin:1.5em auto;display:block;border:none">
 
-My Cybersecurity journey started with me joining a college CTF team called [Cryptonite](https://ctftime.org/team/62713). I started off a rev and crypto guy in my first year, I stuck to rev for long but gave up midway on crypto when the real math started coming in. It was just a decision to choose between rev or crypto and I went with rev. But along with this I've also been trying out other domains so I was developing surface level knowledge on webex as well.
+My Cybersecurity journey started with me joining a college CTF team called <a href="https://ctftime.org/team/62713" style="color:#00ff00">Cryptonite</a>. I started off a rev and crypto guy in my first year, I stuck to rev for long but gave up midway on crypto when the real math started coming in. It was just a decision to choose between rev or crypto and I went with rev. But along with this I've also been trying out other domains so I was developing surface level knowledge on webex as well.
 
 Then comes 2025.
 
@@ -23,7 +23,7 @@ Then comes 2026.
 
 I was expecting the same competition that I prepped so hard for would come back again and I wanted my juniors to participate as well. It didn't happen eventually but in hopes of "it might happen" I had to improve myself in the first place to teach anyone. That was the initial intention, but that eventually changed drastically.
 
-I started with Dante and Alchemy, and doing it alone gave a real thrill and feel-good moments. I was feeling ecstatic whenever my gut feeling on what the exploit might be went right. Maybe I'll make a blog about it sometime on my mindset when I do pentest if it helps anyone. So naturally, I was getting the better of myself and I swayed away from the intention to learn and teach to just learn. For 3 months I was glued to my chair day and nite to exploit it all. I had to learn binex for some stuff but my fundamentals were pretty strong for it by end of 2025 so that helped a lot.
+I started with Dante and Alchemy, and doing it alone gave a real thrill and feel-good moments. I was feeling ecstatic whenever my gut feeling on what the exploit might be went right. Maybe I'll make a blog about it sometime on my mindset when I do pentest if it helps anyone. So naturally, I was getting the better of myself and I swayed away from the intention to learn and teach to just learn. For 3 months I was glued to my chair day and <span style="color:#00ff00">nite</span> to exploit it all. I had to learn binex for some stuff but my fundamentals were pretty strong for it by end of 2025 so that helped a lot.
 
 The whole idea of exploiting things motivated me to further do work on binex which my knowledge progress might be indicated from my writeups for LACTF.
 
