@@ -550,7 +550,7 @@ while True:
 
 ## Flag
 
-<img src="/assets/media/this-is-how-you-pwn-the-time-war/flag.png" alt="flag screenshot" style="max-width:100%">
+<img src="/assets/media/this-is-how-you-pwn-the-time-war/flag.png" alt="flag screenshot" style="max-width:100%;display:block;margin:1.5em auto">
 
 ```
 lactf{pwn_challs_are_bits_in_binaries_cast_into_the_waves_of_time}
