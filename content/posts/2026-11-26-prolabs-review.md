@@ -5,8 +5,6 @@ summary = ""
 tags = ["pentest"]
 +++
 
-<img src="/assets/media/prolabs-review/htb-profile-11-11.jpg" alt="HTB profile showing 11/11 Pro Labs completed" style="max-width:100%;border-radius:8px;margin:1.5em 0">
-
 I've completed all 11 HTB Pro Labs. This is a review of each one, what it's actually like, what you'll learn, and what I'd tell someone before they start. Difficulty order I'd rank them: Dante, Alchemy, Zephyr, RastaLabs, Offshore, Wutai, Ifrit, Wanderer, Shinra, Cybernetics, APTLabs.
 
 ---
@@ -37,7 +35,7 @@ The highlight of the Lab, the OT section will introduce you to some custom PLCs 
 
 I would say attempt the OT section unprepared, preparation might cloud your expectation or create tunnel vision when you actually sit and think of an exploit. The whole memory map, r/w registers & coils can be learnt on the go. This kinda helped me come across that Modbus has no authentication by itself, vendors mimic security by reserving registers for passwords and blocking reads/writes until correct values are written at certain regions. The difficult part though is scripting. You'll have to depend on pymodbus throughout for coil enumeration and the final exploit. The fun part though is sometimes it'll either be an actual logic bug that you'll notice in the ST file or it might be a web exploit to get the flag. Anyways, still the tip remains **make sense of the information present**.
 
-PS: I solved this way back at the start of the year and recently came to know that this Pro Lab has been removed. It might turn up in the enterprise section sometime later but nonetheless it's sad to know that it's not included anymore in the Pro Lab sub.
+**PS: I solved this way back at the start of the year and recently came to know that this Pro Lab has been removed. It might turn up in the enterprise section sometime later but nonetheless it's sad to know that it's not included anymore in the Pro Lab sub.**
 
 ---
 
@@ -122,3 +120,53 @@ The entry points cover web API exploitation and mobile app analysis. The mobile 
 There's a WiFi network in the lab too, and the credential for it is something you'll have already collected by the time you need it.
 
 The internal machines will put you through GitLab CI/CD abuse and a few creative privilege escalation paths. The AD part is almost a footnote. Some cloud-flavored pivoting gets you what you need to close it out.
+
+The rest of the portion of the lab except for the new things that you'll come across seem a bit forced. It seems like ippsec wanted to introduce a few new things but that made up 40% of the lab and he just buffered the rest 60% with whatever he could find to make it a "Pro Lab".
+
+---
+
+## Shinra
+
+<img src="/assets/media/prolabs-review/cert-shinra.jpg" alt="Shinra Pro Lab Certificate of Completion" style="max-width:65%;border-radius:6px;margin:1.5em auto;border:none;display:block">
+
+Shinra was the most recent addition to Pro Labs and it came along with Wutai. Absolute game changer. I wanted to blood it so bad ever since it came out but was long stuck on the last flag for a good while, somehow managed to be the 4th person to finish it. Also the SIEM sticks, read-only account to watch detections. This time Idk what EDR it was across all endpoints but it was doing a very good job. So evasion and covert operations is the entire point here.
+
+This was the first lab where I started using a C2, Sliver made sense to me and along with the Armory it did the job. Though Sliver droppers were getting caught, I had to take a step back and make some new loaders. There was no way I could reverse to see where the EDR was catching my payloads so I just targeted to make my loaders work on the latest Defender. My implants were still Sliver-generated. Honestly I should've started using C2's before this lab but better now than never coz there's no way you can do Cybernetics and APTLabs without one.
+
+Three AD forests to compromise. Again phishing is there. The lab covers a lot of ground like CI/CD infrastructure attacks and binary exploitation. Though the backdooring applications part is hella cool like it'll blow your mind. The whole setup is so so close to realistic. I won't talk much about the AD part, don't want to ruin the fun. I have a tip though, go through [this blog](https://www.vaadata.com/blog/ad-cs-security-understanding-and-exploiting-esc-techniques/) carefully.
+
+---
+
+## Cybernetics
+
+<img src="/assets/media/prolabs-review/cert-cybernetics.jpg" alt="Cybernetics Pro Lab Certificate of Completion" style="max-width:65%;border-radius:6px;margin:1.5em auto;border:none;display:block">
+
+Cybernetics is RTO level II and the biggest by a lot. Five domains, 25 flags, 28+ machines. The fictional company's gone through several pentest rounds and hardened after each one, so fully patched OS and EDR across all hosts. Zero CVE-based exploits. If you haven't worked with a C2 till now you're gonna feel the need on this one. Shinra should've pushed you there but Cybernetics will make sure. It was fun and funny as well coz I started doing this lab in between an offline bootcamp that started teaching C2.
+
+Phishing is back and honestly the hardest part of this lab for most. Once you're past it the AD side flows much better, the cross-forest work is familiar territory by now. What makes Cybernetics stand out is the DevOps depth. It exposes you to the widest range of DevOps tooling and shows you how they interconnect as an attack surface. Not necessarily the most realistic simulation but the best survey of that stack. Same advice from Offshore applies here, work with large layouts in BloodHound. There's also an RDS published app breakout. Kiosk environments, restricted app contexts, escaping them. First time you'll see it in a Pro Lab.
+
+The last domain is Inception themed. Flag names, machine names, all of it. It's a fun last leg. But I'll warn that this is gonna take a lot of time, so I'd again suggest to hit the HTB Discord community and ask for a nudge.
+
+**PS: Same as Alchemy, Cybernetics has been removed from the Pro Lab sub. Hopefully it turns up in the enterprise section at some point.**
+
+---
+
+## APTLabs
+
+<img src="/assets/media/prolabs-review/cert-aptlabs.jpg" alt="APTLabs Pro Lab Certificate of Completion" style="max-width:65%;border-radius:6px;margin:1.5em auto;border:none;display:block">
+
+APTLabs is the final one. Level III, 5 AD forests, 20 flags, 18 machines. You'll feel like killing yourself but it's rewarding. No other professional expensive ahh cert comes close to this, OSEP doesn't even come close. The name gives it away, it puts you in the mindset of a state sponsored threat actor. You'll have to think like an APT group operating against a managed service provider and working through all of its clients. That framing is intentional and runs throughout the whole lab.
+
+Fully patched, zero CVE-based exploits, same deal as Cybernetics and Shinra but pushed further. AMSI, JEA and WDAC are all layered and active simultaneously.
+
+The phishing section here is an entire chain in itself but it'll somewhere along the line teach you the actual perception of a victim clicking on something. It's not "send a document and wait" like the previous labs. 2FA is in the picture and you'll be building things from the perimeter before the phish even fires. Most involved phishing across all 11 labs.
+
+Here's the fun part and it's the actual tone setter, the user accounts are not in English. The naming conventions, the usernames, the way everything is structured looks foreign. It's friction that makes complete sense given the scenario, you're attacking another country's infrastructure, so of course it doesn't look like every previous lab right. Language would've constricted your approach in any and all labs but this will ig teach you to be open to all things that come at you.
+
+Identity federation is a core part of the attack chain, more so than any lab before this. What you can do with a compromised federation server across trusted domains goes much further than you'd expect. SCCM also shows up as a lateral movement path and it's not incidental, it's one of the main routes into a client network.
+
+JEA is in here too. If you haven't come across it before, watch [this DEF CON 25 talk](https://www.youtube.com/watch?v=6vOiHKDRhbM) by Lee Holmes before you hit that wall.
+
+This is gonna take the longest of any lab. Only tip would be to go beyond default wordlists for cracking. Whoever made this was definitely smoking the good stuff or has been in the APT scenes for some time. Nonetheless if you're looking for some spice, this is the one.
+
+**PS: One of the only labs that could help develop an APT mindset, but sadly it's been removed from the Pro Lab sub as well.**
