@@ -190,7 +190,7 @@ pwndbg> vis_heap_chunks
 pwndbg> bins
 ```
 
-<video autoplay loop muted playsinline style="max-width:100%;display:block;margin:1.5em 0">
+<video autoplay loop muted playsinline style="max-width:100%;display:block;margin:1.5em auto">
   <source src="/assets/media/ourukla/exploit.mp4" type="video/mp4">
 </video>
 
@@ -355,7 +355,7 @@ io.sendline(b"cat flag.txt")
 io.interactive()
 ```
 
-<img src="/assets/media/ourukla/flag-drop.png" alt="Flag drop in team chat" style="border:none;max-width:100%;height:auto;display:block;margin:1.5em 0">
+<img src="/assets/media/ourukla/flag-drop.png" alt="Flag drop in team chat" style="border:none;max-width:100%;height:auto;display:block;margin:1.5em auto">
 
 `lactf{w0w_y0u_s0lv3d_m3_heap_heap_hurray}`
 
