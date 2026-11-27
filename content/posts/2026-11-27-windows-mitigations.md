@@ -1,5 +1,5 @@
 +++
-title = "The Windows Mitigation Arms Race: How the Kernel Got Hard to Own (And Why It Still Gets Owned)"
+title = "the windows mitigation arms race: how the kernel got hard to own (and why it still gets owned)"
 date = 2026-11-27
 draft = false
 summary = "A deep technical walkthrough of every major Windows kernel mitigation from DEP to HVCI to VBS enclaves, how they were bypassed, and why BYOVD dominates modern attacks."
